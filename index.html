@@ -3,22 +3,21 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Optimizing Clinical Lab Operations — Thesis</title>
+  <title>Haemosense — Optimizing Clinical Lab Operations</title>
   <meta name="description" content="Healthcare ML product concept: reduce redraws and delays via haemolysis risk prediction. Transparent model with SHAP & permutation importance." />
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root{
-      --bg:#05080f;           /* deep night */
-      --panel:#0c1220;        /* card */
-      --panel-2:#0f1a2e;      /* elevated */
-      --text:#e7f6ff;         /* near-white */
-      --muted:#9fb3c8;        /* muted */
-      --accent:#e11d48;       /* crimson */
-      --accent-2:#dc2626;     /* red */
+      --bg:#05080f;
+      --panel:#0c1220;
+      --panel-2:#0f1a2e;
+      --text:#e7f6ff;
+      --muted:#9fb3c8;
+      --accent:#e11d48;
+      --accent-2:#dc2626;
       --ok:#22c55e;
       --warn:#f59e0b;
       --danger:#ef4444;
@@ -81,7 +80,7 @@
     .panel{display:none; margin-top:16px}
     .panel.active{display:block}
 
-    /* RESULTS GRID (no slider) */
+    /* RESULTS GRID */
     .results-grid{display:grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap:14px; margin-top:10px}
     .exp{background: color-mix(in hsl, var(--panel-2), transparent 0%); border:1px solid var(--border); border-radius:16px; padding:14px}
     .exp h4{margin:0 0 6px 0}
@@ -126,23 +125,10 @@
         radial-gradient(600px 300px at 90% -10%, rgba(220,38,38,.08), transparent 60%);
     }
 
-    /* ---------- FIXES FOR DATA TAB TABLE ---------- */
-
-    /* 1) Let the schema card span full width in the Data tab */
-    #panel-1 .strip{
-      grid-template-columns: 1fr;
-    }
-
-    /* 2) Allow wide tables to scroll horizontally instead of being clipped */
-    .table-wrap{
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-    }
-
-    /* 3) Give the schema table a sensible minimum width so columns don't collapse */
-    .table--wide{
-      min-width: 720px; /* adjust if you want more/less */
-    }
+    /* Data tab table fixes */
+    #panel-1 .strip{ grid-template-columns: 1fr; }
+    .table-wrap{ overflow-x:auto; -webkit-overflow-scrolling:touch; }
+    .table--wide{ min-width:720px; }
   </style>
 </head>
 <body>
@@ -170,7 +156,8 @@
           <span id="cycler">Haemolysis risk</span> • Transit time • Fairness • Explainable AI
         </div>
         <div class="cta" role="group" aria-label="Primary actions">
-          <a class="btn primary" href="#download-pdf" id="">Documentation</a>
+          <!-- Top download button -->
+          <a class="btn primary" href="#" id="download-pdf-top">Documentation</a>
           <a class="btn" href="#experiments">See Results</a>
           <a class="btn" href="#contact">✉️ Contact</a>
         </div>
@@ -229,7 +216,7 @@
                 </tbody>
               </table>
             </div>
-            <p class="mini">Data were collected from an Public Irish Univeristy Hospital. Data were collected in a way that they are GDPR and ALTAI complaint.</p>
+            <p class="mini">Data collected in a GDPR-compliant manner; timestamps normalized into interval features for modelling.</p>
           </div>
         </div>
       </div>
@@ -245,7 +232,6 @@
 
       <!-- RESULTS -->
       <div class="panel reveal" id="panel-3" role="tabpanel" aria-labelledby="tab-3">
-        <!-- Product-style headline for the model -->
         <div class="card" style="margin-bottom:12px">
           <h3 style="margin:0 0 8px">Final Model — Binary MLP Classifier (undersampling)</h3>
           <div class="mini">Predicts haemolysis risk <strong>(Low vs High)</strong> to triage redraws and manage logistics.</div>
@@ -257,7 +243,6 @@
           <details><summary>How this helps operations</summary><div class="tiny">Flags higher-risk samples early so clinics can adjust handling, packaging, or courier windows to reduce redraws and delays.</div></details>
         </div>
 
-        <!-- All experiments grid -->
         <div class="results-grid" aria-label="Experiments">
           <article class="exp">
             <h4>Exp 1 — Random Forest Regressor</h4>
@@ -314,9 +299,9 @@
           </article>
         </div>
 
-        <!-- Compare table -->
-        <button id="compare-toggle" class="btn" style="margin-top:18px; margin-bottom:12px ; color: #e7f6ff;"><i style="font-size:24px" class="fa">&#xf0ce;</i>
- Summary Table</button>
+        <button id="compare-toggle" class="btn" style="margin-top:18px; margin-bottom:12px; color:#e7f6ff;">
+          <i style="font-size:24px" class="fa">&#xf0ce;</i> Summary Table
+        </button>
         <div id="compare-table" style="display:none; overflow-x:auto; margin-bottom:20px">
           <table class="table" style="min-width:780px">
             <thead>
@@ -350,12 +335,10 @@
           <h3 style="margin:0 0 8px">SHAP Insights</h3>
           <div class="mini">Highlights Which <strong>Features</strong> Contribute to Haemolysis Elevation. <strong>Simple Design</strong> For <strong>Easy Interpretation</strong> By Clinicians & Lab Staff.</div><br>
           <div class="gallery">
-            <a href="/Users/eugenelim/Documents/assets/SHAP_PER_CLASS.png" class="thumb" data-title="SHAP Feature Importance (Bar)"><img src="/Users/eugenelim/Documents/assets/SHAP_PER_CLASS.png" alt="SHAP bar importance"></a>
-            <a href="/Users/eugenelim/Documents/assets/SHAP_PROTO.png" class="thumb" data-title="SHAP Feature Importance (Bar)"><img src="/Users/eugenelim/Documents/assets/SHAP_PROTO.png" alt="SHAP bar importance"></a>
-            <a href="/Users/eugenelim/Documents/assets/SHAP_FINAL_MODEL.png" class="thumb" data-title="SHAP Beeswarm — Final Model"><img src="/Users/eugenelim/Documents/assets/SHAP_FINAL_MODEL.png" alt="SHAP beeswarm final"></a>
-
-
-        </div>
+            <a href="./assets/SHAP_PER_CLASS.png" class="thumb" data-title="SHAP Per Class"><img src="./assets/SHAP_PER_CLASS.png" alt="SHAP per class"></a>
+            <a href="./assets/SHAP_PROTO.png" class="thumb" data-title="SHAP Prototype"><img src="./assets/SHAP_PROTO.png" alt="SHAP prototype"></a>
+            <a href="./assets/SHAP_FINAL_MODEL.png" class="thumb" data-title="SHAP Beeswarm — Final Model"><img src="./assets/SHAP_FINAL_MODEL.png" alt="SHAP beeswarm final"></a>
+          </div>
         </div>
 
         <!-- Permutation Importance section -->
@@ -363,27 +346,25 @@
           <h3 style="margin:0 0 8px">Permutation Importance</h3>
           <div class="mini">Perturbation to Confirm SHAP: Highlights What Affects Haemolysis Most When <strong>Shuffled</strong>.</div><br>
           <div class="gallery">
-            <a href="/Users/eugenelim/Documents/assets/PERM_IMP.png" class="thumb" data-title="Permutation Importance — Table"><img src="/Users/eugenelim/Documents/assets/PERM_IMP.png" alt="Permutation importance bar"></a>
+            <a href="./assets/PERM_IMP.png" class="thumb" data-title="Permutation Importance — Table"><img src="./assets/PERM_IMP.png" alt="Permutation importance bar"></a>
           </div>
         </div>
-         <!-- Bias Checks section -->
+
+        <!-- Bias Checks section -->
         <div class="card reveal" style="margin:14px 0">
           <h3 style="margin:0 0 8px">Per Class Bias Checks</h3>
-          <div class="mini">Making Sure The Model isnt Bias With <strong>Class-Oriented Checks</strong>. Accuracy Can Be High Even With Bias Present, <strong>Sensitivity & Specificity</strong>  Per Class Must Be Checked As Well.</div><br>
+          <div class="mini">Check sensitivity & specificity per class to detect hidden bias.</div><br>
           <div class="gallery">
-            <a href="/Users/eugenelim/Documents/assets/BIAS_CLASS.png" class="thumb" data-title="Classification Report - (2 Classes)"><img src="/Users/eugenelim/Documents/assets/BIAS_CLASS.png" alt="Permutation importance bar"></a>
-            <a href="/Users/eugenelim/Documents/assets/BIAS_CLASS_2.png" class="thumb" data-title="Classification Report - (3 Classes)"><img src="/Users/eugenelim/Documents/assets/BIAS_CLASS_2.png" alt="Permutation importance bar"></a>
+            <a href="./assets/BIAS_CLASS.png" class="thumb" data-title="Classification Report - (2 Classes)"><img src="./assets/BIAS_CLASS.png" alt="Classification report 2-class"></a>
+            <a href="./assets/BIAS_CLASS_2.png" class="thumb" data-title="Classification Report - (3 Classes)"><img src="./assets/BIAS_CLASS_2.png" alt="Classification report 3-class"></a>
+          </div>
         </div>
-        </div>
-
-
-
       </div>
 
       <!-- ETHICS -->
       <div class="panel reveal" id="panel-4" role="tabpanel" aria-labelledby="tab-4">
         <div class="strip">
-          <div class="card"><h3>Frameworks</h3><div class="mini">GDPR • HIPPA • EU AI Act</div></div>
+          <div class="card"><h3>Frameworks</h3><div class="mini">GDPR • HIPAA • EU AI Act</div></div>
           <div class="card"><h3>Focus</h3><div class="mini">Transparency • Bias Checks • Privacy-by-design</div></div>
           <div class="card"><h3>Practice</h3><div class="mini">Purpose limitation • Access control • Audit trail</div></div>
         </div>
@@ -392,24 +373,22 @@
       <!-- SIGNIFICANCE -->
       <div class="panel reveal" id="panel-5" role="tabpanel" aria-labelledby="tab-5">
         <div class="card" style="margin-bottom:12px">
-          <h3 style="margin:0 0 8px"></h3>
-        <details><summary>Pre-analytical errors</summary><div class="tiny">Flags haemolysis before analysis so labs can reprioritise, re-pack, or re-draw early—cutting delays, reruns, and patient callbacks.</div></details>
+          <details><summary>Pre-analytical errors</summary><div class="tiny">Flags haemolysis before analysis so labs can reprioritise, re-pack, or re-draw early—cutting delays, reruns, and patient callbacks.</div></details>
         </div>
-         <div class="card" style="margin-bottom:12px">
-          <h3 style="margin:0 0 8px"></h3>
-          <details><summary>Actionable</summary><div class="tiny">SHAP & permutation importance consistently surface potassium, delivery window, and transport mode—clear levers ops teams can actually change (scheduling, packaging, courier SOPs).</div></details>
-        </div> <div class="card" style="margin-bottom:12px">
-          <h3 style="margin:0 0 8px"></h3>
-          <details><summary>Clinician-Trustable</summary><div class="tiny">Every prediction comes with an explanation (feature contributions), so staff can see why a sample was flagged and contest it—key for human-centred AI.</div></details>
-        </div> <div class="card" style="margin-bottom:12px">
-          <h3 style="margin:0 0 8px"></h3>
-          <details><summary>Runs on Routine Data</summary><div class="tiny">LIS timestamps, GP/site, delivery metadata, and potassium—no exotic sensors required. Easier to integrate, easier to maintain.</div></details>
-        </div> <div class="card" style="margin-bottom:12px">
-          <h3 style="margin:0 0 8px"></h3>
-          <details><summary>GDPR Friendly</summary><div class="tiny">Built around pseudonymised, minimised data and auditable logic; compatible with Article 9(2)(j)/89(1) research safeguards</div></details>
-        </div> <div class="card" style="margin-bottom:12px">
-          <h3 style="margin:0 0 8px"></h3>
-          <details><summary>Configurable</summary><div class="tiny">Use thresholding and uncertainty gating to tune sensitivity vs specificity per lab, time of day, or volume. Start conservative; widen later.</div></details>
+        <div class="card" style="margin-bottom:12px">
+          <details><summary>Actionable</summary><div class="tiny">SHAP & permutation importance consistently surface potassium, delivery window, and transport mode—clear levers ops teams can actually change.</div></details>
+        </div>
+        <div class="card" style="margin-bottom:12px">
+          <details><summary>Clinician-Trustable</summary><div class="tiny">Every prediction comes with an explanation (feature contributions), so staff can see why a sample was flagged and contest it.</div></details>
+        </div>
+        <div class="card" style="margin-bottom:12px">
+          <details><summary>Runs on Routine Data</summary><div class="tiny">LIS timestamps, GP/site, delivery metadata, and potassium—no exotic sensors required.</div></details>
+        </div>
+        <div class="card" style="margin-bottom:12px">
+          <details><summary>GDPR Friendly</summary><div class="tiny">Pseudonymised, minimised data and auditable logic; compatible with research safeguards.</div></details>
+        </div>
+        <div class="card" style="margin-bottom:12px">
+          <details><summary>Configurable</summary><div class="tiny">Tune sensitivity vs specificity with thresholds and uncertainty gating.</div></details>
         </div>
       </div>
     </section>
@@ -418,21 +397,30 @@
       <div class="strip">
         <div class="card reveal">
           <h3>Get the PDF</h3>
-          <div class="mini">Dowload a copy of the research documentation</div>
-          <div style="margin-top:10px"><a class="btn primary" href="#" id="download-pdf"><i style="font-size:24px" class="fa">&#xf019;</i>
- Download</a></div>
+          <div class="mini">Download a copy of the product documentation</div>
+          <div style="margin-top:10px">
+            <a class="btn primary" href="#" id="download-pdf">
+              <i style="font-size:24px" class="fa">&#xf019;</i> Download
+            </a>
+          </div>
         </div>
         <div class="card reveal">
           <h3>Source Code</h3>
           <div class="mini">Reproducible notebooks & data prep.</div>
-          <div style="margin-top:10px"><a class="btn" href="#" id="github-link"><i style="font-size:24px" class="fa">&#xf09b;</i>
- Open Repo</a></div>
+          <div style="margin-top:10px">
+            <a class="btn" href="#" id="github-link">
+              <i style="font-size:24px" class="fa">&#xf09b;</i> Open Repo
+            </a>
+          </div>
         </div>
         <div class="card reveal">
           <h3>Connect</h3>
           <div class="mini">Feedback & collaboration welcome.</div>
-          <div style="margin-top:10px"><a class="btn" href="https://www.linkedin.com/in/eugene-lim-883533227?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BvwARhaCqRamLG8xhPM%2FqNQ%3D%3D"><i style="font-size:24px" class="fa">&#xf08c;</i>
- LinkedIn</a></div>
+          <div style="margin-top:10px">
+            <a class="btn" href="https://www.linkedin.com/in/eugene-lim-883533227?lipi=urn%3Ali%3Apage%3Ad_flagship3_profile_view_base_contact_details%3BvwARhaCqRamLG8xhPM%2FqNQ%3D%3D" target="_blank" rel="noopener">
+              <i style="font-size:24px" class="fa">&#xf08c;</i> LinkedIn
+            </a>
+          </div>
         </div>
       </div>
     </section>
@@ -445,9 +433,35 @@
   </footer>
 
   <script>
-    // Link placeholders — replace with your actual URLs
-    document.getElementById('download-pdf').href = '/Users/eugenelim/Documents/assets/Thesis.pdf'; // e.g., /files/thesis.pdf
-    document.getElementById('github-link').href = 'https://github.com/eugenelim831/A-Human-Centred-Machine-Learning-Approach-to-Operational-Risk-Factors'; // e.g., https://github.com/eugenelim831/eugenelim831.github.io
+    // === Set real links for GitHub Pages ===
+    // Put your PDF in: files/Haemosense_Documentation.pdf
+    const pdfPath = './files/Haemosense_Documentation.pdf';
+
+    function setLink(id, href, attrs = {}) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      el.href = href;
+      Object.entries(attrs).forEach(([k,v]) => el.setAttribute(k, v));
+    }
+
+    // Top + bottom download buttons
+    setLink('download-pdf-top', pdfPath, {
+      type: 'application/pdf',
+      download: 'Haemosense_Documentation.pdf',
+      'aria-label': 'Download product documentation (PDF)'
+    });
+    setLink('download-pdf', pdfPath, {
+      type: 'application/pdf',
+      download: 'Haemosense_Documentation.pdf',
+      'aria-label': 'Download product documentation (PDF)'
+    });
+
+    // Repo link (change if you want to point to the site repo instead)
+    setLink('github-link', 'https://github.com/eugenelim831/A-Human-Centred-Machine-Learning-Approach-to-Operational-Risk-Factors', {
+      target: '_blank', rel: 'noopener', 'aria-label': 'Open source code on GitHub'
+    });
+
+    // Year
     document.getElementById('year').textContent = new Date().getFullYear();
 
     // Keyword cycler
@@ -495,7 +509,6 @@
     const toggle=document.getElementById('compare-toggle');
     const table=document.getElementById('compare-table');
     toggle.addEventListener('click',()=>{ table.style.display = table.style.display==='none' ? 'block' : 'none'; });
-
     document.querySelectorAll('#compare-table th').forEach(th=>{
       th.style.cursor='pointer';
       th.addEventListener('click',()=>{
@@ -521,33 +534,19 @@
     function openLB(src,title){ const img=lb.querySelector('img'); const cap=lb.querySelector('figcaption'); img.src=src; cap.textContent=title||''; lb.classList.add('show'); }
     lb.addEventListener('click',()=>lb.classList.remove('show'));
     document.querySelectorAll('.gallery .thumb').forEach(a=>a.addEventListener('click',e=>{e.preventDefault(); openLB(a.getAttribute('href'), a.dataset.title)}));
-    if ('scrollRestoration' in history) {
-  history.scrollRestoration = 'manual';
-}
 
-// Ensure top on normal loads
-window.addEventListener('load', function () {
-  // zero-delay to run after layout
-  setTimeout(function () {
-    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-  }, 0);
-});
+    // Always start at top on load/refresh and bfcache restore
+    if ('scrollRestoration' in history) { history.scrollRestoration = 'manual'; }
+    window.addEventListener('load', () => { setTimeout(() => { window.scrollTo({ top: 0, left: 0, behavior: 'auto' }); }, 0); });
+    window.addEventListener('pageshow', () => { window.scrollTo({ top: 0, left: 0, behavior: 'auto' }); });
 
-// Ensure top when coming back via back/forward cache (bfcache)
-window.addEventListener('pageshow', function () {
-  window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
-});
-
-// Optional: ignore an initial #hash so it doesn't auto-jump on first visit
-// (Remove this block if you *want* to land on hashes when directly linked)
-(function () {
-  if (!sessionStorage.getItem('firstVisitDone')) {
-    sessionStorage.setItem('firstVisitDone', '1');
-    if (location.hash) {
-      history.replaceState(null, '', location.pathname + location.search);
-    }
-  }
-})();
+    // Ignore initial hash on first visit (optional)
+    (function () {
+      if (!sessionStorage.getItem('firstVisitDone')) {
+        sessionStorage.setItem('firstVisitDone', '1');
+        if (location.hash) { history.replaceState(null, '', location.pathname + location.search); }
+      }
+    })();
   </script>
 </body>
 </html>
